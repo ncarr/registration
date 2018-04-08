@@ -1,17 +1,20 @@
 <template>
-  <section class="container">
-    <img src="~assets/img/logo.png" alt="Nuxt.js Logo" class="logo" />
-    <h1 class="title">
-      USERS
-    </h1>
-    <ul class="users">
-      <li v-for="(user, index) in users" :key="index" class="user">
-        <nuxt-link :to="{ name: 'id', params: { id: index }}">
-          {{ user.name }}
-        </nuxt-link>
-      </li>
-    </ul>
-  </section>
+  <v-app>
+    <v-content>
+      <v-container>
+        <v-layout>
+          <v-flex sm6 offset-sm3 xs12>
+            <h1>USERS</h1>
+              <v-card v-for="(user, index) in users" :key="index">
+                <nuxt-link :to="{ name: 'id', params: { id: index }}">
+                  {{ user.name }}
+                </nuxt-link>
+              </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
@@ -29,20 +32,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.title
-{
-  margin: 30px 0;
-}
-.users
-{
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.user
-{
-  margin: 10px 0;
-}
-</style>

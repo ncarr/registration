@@ -1,16 +1,13 @@
 import { Router } from 'express'
+import mongoose from 'mongoose'
+import organizer from './middleware/organizer'
+import Member from './models/Member'
 
 const router = Router()
-
-// Mock Users
-const users = [
-  { name: 'Alexandre' },
-  { name: 'Pooya' },
-  { name: 'Sébastien' },
-]
+mongoose.connect('mongodb://localhost/registration')
 
 /* GET users listing. */
-router.get('/users', function (req, res, next) {
+router.get('/users', organizer, function (req, res, next) {
   res.json(users)
 })
 
