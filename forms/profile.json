@@ -1,0 +1,47 @@
+{
+  "fields": [
+    {
+      "name": "name",
+      "label": "Full name"
+    },
+    {
+      "name": "phone",
+      "label": "Phone number",
+      "type": "phone"
+    },
+    {
+      "name": "birth",
+      "label": "Date of Birth",
+      "type": "date"
+    },
+    {
+      "name": "school",
+      "label": "School Name",
+      "optional": true
+    },
+    {
+      "name": "city"
+    },
+    {
+      "name": "province",
+      "label": "Province/State"
+    },
+    {
+      "name": "country"
+    },
+    {
+      "name": "pronouns",
+      "optional": true
+    },
+    {
+      "name": "dietaryRestrictions",
+      "optional": true,
+      "multiLine": true
+    },
+    {
+      "name": "specialNeeds",
+      "optional": true,
+      "multiLine": true
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-let schema = new mongoose.Schema({
+const schema = new mongoose.Schema({
   // Metadata
   email: { type: String, required: true, unique: true },
   roles: [String],
@@ -22,9 +22,9 @@ let schema = new mongoose.Schema({
   links: String,
   other: String,
   // Application status
-  submitted: Boolean,
-  accepted: Boolean,
-  going: Boolean
+  submitted: Date,
+  accepted: Date,
+  status: { type: Number, default: 0 }, // 0 - unsubmitted, 1 - submitted/under review, 2 - rejected, 3 - accepted, 4 - can't come, 5 - going
 })
 
 export default mongoose.model('Member', schema)

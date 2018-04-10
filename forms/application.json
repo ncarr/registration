@@ -1,0 +1,24 @@
+{
+  "fields": [
+    {
+      "name": "shirtSize"
+    },
+    {
+      "name": "achievement",
+      "label": "What was your best achievement? It doesn't have to be computer-related. (1500 chars max)",
+      "multiLine": true
+    },
+    {
+      "name": "links",
+      "label": "Any other links (GitHub, LinkedIn, personal website, etc.)",
+      "multiLine": true,
+      "optional": true
+    },
+    {
+      "name": "other",
+      "label": "Anything else? (1500 chars max)",
+      "multiLine": true,
+      "optional": true
+    }
+  ]
+}
