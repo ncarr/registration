@@ -1,19 +1,10 @@
-import Member from '../models/Member'
+import getAuthenticatedUser from '../util/getAuthenticatedUser'
 
 export default async (req, res, next) => {
-  try {
-    if (req.session && req.session.token) {
-      const member = await Member.findOne({ tokens: req.cookies.token }).exec()
-      if (member) {
-        req.user = member
-        return next()
-      } else {
-        throw new Error('Please sign in')
-      }
-    } else {
-      throw new Error('Sign in token is invalid')
-    }
-  } catch (e) {
-    return next(e)
+  const member = await getAuthenticatedUser(req).catch(next)
+  if (member) {
+    req.user = member
+    return next()
   }
+  next(new Error('Please sign in'))
 }

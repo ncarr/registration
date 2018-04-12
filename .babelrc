@@ -1,0 +1,8 @@
+{
+  "presets": [
+    "backpack-core/babel"
+  ],
+  "plugins": [
+    "transform-function-bind"
+  ]
+}

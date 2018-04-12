@@ -24,7 +24,7 @@ const schema = new mongoose.Schema({
   // Application status
   submitted: Date,
   accepted: Date,
-  status: { type: Number, default: 0 }, // 0 - unsubmitted, 1 - submitted/under review, 2 - rejected, 3 - accepted, 4 - can't come, 5 - going
+  status: { type: Number, default: 0 } // 0 - unsubmitted, 1 - submitted/under review, 2 - rejected, 3 - accepted, 4 - can't come, 5 - going
 })
 
 export default mongoose.model('Member', schema)

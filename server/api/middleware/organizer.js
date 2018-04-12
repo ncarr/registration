@@ -2,7 +2,7 @@ import Member from '../models/Member'
 
 export default async (req, res, next) => {
   try {
-    if (req.session && req.session.token) {
+    if (req.cookies && req.cookies.token) {
       const member = await Member.findOne({ tokens: req.cookies.token, roles: 'organizer' }).exec()
       if (member) {
         req.user = member
