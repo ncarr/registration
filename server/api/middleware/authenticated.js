@@ -1,10 +1,14 @@
 import getAuthenticatedUser from '../util/getAuthenticatedUser'
 
 export default async (req, res, next) => {
-  const member = await getAuthenticatedUser(req).catch(next)
-  if (member) {
-    req.user = member
-    return next()
+  try {
+    const member = await getAuthenticatedUser(req)
+    if (member) {
+      req.user = member
+      return next()
+    }
+    throw new Error('Please sign in')
+  } catch (e) {
+    return next(e)
   }
-  next(new Error('Please sign in'))
 }

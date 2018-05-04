@@ -1,16 +1,11 @@
 import express from 'express'
 import { Nuxt, Builder } from 'nuxt'
 
-import api from './api'
-
 const app = express()
 const host = process.env.HOST || '127.0.0.1'
 const port = process.env.PORT || 3000
 
 app.set('port', port)
-
-// Import API Routes
-app.use('/api', api)
 
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')
@@ -23,7 +18,15 @@ const nuxt = new Nuxt(config)
 if (config.dev) {
   const builder = new Builder(nuxt)
   builder.build()
+  require('dotenv').config()
 }
+
+const api = require('./api').default
+const auth = require('./auth').default
+
+// Import API Routes
+app.use('/api', api)
+app.use('/signin', auth)
 
 // Give nuxt middleware to express
 app.use(nuxt.render)

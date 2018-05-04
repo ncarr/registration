@@ -24,7 +24,6 @@
 <script>
 import Profile from '~/components/Profile'
 import Application from '~/components/Application'
-import axios from '~/plugins/axios'
 
 export default {
   components: {
@@ -40,13 +39,13 @@ export default {
   methods: {
     async save () {
       this.saving = true
-      await axios.patch('/api/users/me', this.application)
+      await this.$axios.patch('/users/me', this.application)
       this.saving = false
       this.saved = true
     },
     async submit () {
       await this.save()
-      await axios.post('/api/users/me/application/submit')
+      await this.$axios.post('/users/me/application/submit')
       this.submitted = true
     }
   },

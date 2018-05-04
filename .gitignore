@@ -12,3 +12,9 @@ dist
 
 # Backpack build
 build
+
+# Dev environment variables
+.env
+
+# Keys
+secrets

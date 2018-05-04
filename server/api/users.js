@@ -9,6 +9,7 @@ import getAuthenticatedUser from './util/getAuthenticatedUser'
 
 const router = Router()
 mongoose.connect('mongodb://localhost/registration')
+  .catch(() => console.error('Could not initially connect to MongoDB'))
 
 router.use(json())
 router.use(cookieParser())
@@ -38,6 +39,7 @@ router.get('/attendees', organizer, (req, res, next) =>
 /* GET user by ID. */
 // TODO: Filter to information available to user
 router.get('/users/me', authenticated, (req, res) => res.json(req.user))
+router.get('/users/me/application/status', authenticated, (req, res) => res.send({ data: req.user.status }))
 
 // TODO: Validate profile + application fields (& ensure email exists)
 router.patch('/users/me', async (req, res, next) => {

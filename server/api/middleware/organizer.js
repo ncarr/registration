@@ -1,18 +1,16 @@
-import Member from '../models/Member'
+import getAuthenticatedUser from '../util/getAuthenticatedUser'
 
 export default async (req, res, next) => {
   try {
-    if (req.cookies && req.cookies.token) {
-      const member = await Member.findOne({ tokens: req.cookies.token, roles: 'organizer' }).exec()
-      if (member) {
+    const member = await getAuthenticatedUser(req)
+    if (member) {
+      if (member.roles.contains('organizer')) {
         req.user = member
         return next()
-      } else {
-        throw new Error('Not signed in as an organizer')
       }
-    } else {
-      throw new Error('Sign in token is invalid')
+      throw new Error('Not an organizer')
     }
+    throw new Error('Please sign in')
   } catch (e) {
     return next(e)
   }

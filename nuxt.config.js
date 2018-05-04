@@ -3,6 +3,7 @@ module.exports = {
   /*
   ** Add axios globally
   */
+  plugins: ['~/plugins/axios'],
   build: {
     vendor: ['axios'],
     /*
