@@ -3,6 +3,8 @@ import mongoose from 'mongoose'
 const schema = new mongoose.Schema({
   // Metadata
   email: { type: String, required: true, unique: true },
+  emailVerified: Boolean,
+  googleID: String,
   roles: [String],
   tokens: [String],
   // Profile

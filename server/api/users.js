@@ -6,6 +6,7 @@ import authenticated from './middleware/authenticated'
 import Member from './models/Member'
 import genToken from './util/genToken'
 import getAuthenticatedUser from './util/getAuthenticatedUser'
+import UnauthenticatedError from './util/UnauthenticatedError';
 
 const router = Router()
 mongoose.connect('mongodb://localhost/registration')
@@ -51,7 +52,7 @@ router.patch('/users/me', async (req, res, next) => {
       res.json(member)
     } else {
       if (await Member.findOne({ email: req.body.email }).exec()) {
-        throw new Error('Please sign in')
+        throw new UnauthenticatedError()
       }
       member = await Member.create({ ...req.body, tokens: [await genToken()] })
       res.cookie('token', member.tokens[0], { maxAge: 365 * 24 * 60 * 60 * 1000 })

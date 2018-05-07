@@ -10,6 +10,10 @@ app.set('port', port)
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')
 config.dev = !(process.env.NODE_ENV === 'production')
+if (config.dev) {
+  const dotenv = require('dotenv').config()
+  config.env = { GOOGLE_CLIENT_ID: dotenv.parsed.GOOGLE_CLIENT_ID }
+}
 
 // Init Nuxt.js
 const nuxt = new Nuxt(config)
@@ -18,7 +22,6 @@ const nuxt = new Nuxt(config)
 if (config.dev) {
   const builder = new Builder(nuxt)
   builder.build()
-  require('dotenv').config()
 }
 
 const api = require('./api').default

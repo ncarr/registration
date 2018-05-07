@@ -1,4 +1,5 @@
 import getAuthenticatedUser from '../util/getAuthenticatedUser'
+import UnauthenticatedError from '../util/UnauthenticatedError'
 
 export default async (req, res, next) => {
   try {
@@ -7,7 +8,7 @@ export default async (req, res, next) => {
       req.user = member
       return next()
     }
-    throw new Error('Please sign in')
+    throw new UnauthenticatedError()
   } catch (e) {
     return next(e)
   }

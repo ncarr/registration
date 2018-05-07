@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title primary-title class="headline">Application</v-card-title>
     <v-card-text>
-      <FormBuilder v-model="application" :fields="fields" />
+      <FormBuilder v-model="application" :fields="fields" :disabled="disabled" />
     </v-card-text>
   </v-card>
 </template>
@@ -17,6 +17,10 @@ export default {
     value: {
       type: Object,
       default: () => ({})
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({ fields }),

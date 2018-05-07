@@ -7,9 +7,10 @@
       :key="i"
       :type="field.type"
       :label="label(field)"
-      :disabled="field.disabled"
+      :disabled="disabled || field.disabled"
       :required="!field.optional"
       :multi-line="field.multiLine"
+      :autocomplete="field.autocomplete"
     />
   </v-form>
 </template>
@@ -25,6 +26,10 @@ export default {
     value: {
       type: Object,
       default: () => ({})
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {

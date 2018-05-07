@@ -2,17 +2,20 @@
   "fields": [
     {
       "name": "name",
-      "label": "Full name"
+      "label": "Full name",
+      "autocomplete": "name"
     },
     {
       "name": "phone",
       "label": "Phone number",
-      "type": "phone"
+      "type": "phone",
+      "autocomplete": "tel"
     },
     {
       "name": "birth",
       "label": "Date of Birth",
-      "type": "date"
+      "type": "date",
+      "autocomplete": "bday"
     },
     {
       "name": "school",
@@ -20,14 +23,17 @@
       "optional": true
     },
     {
-      "name": "city"
+      "name": "city",
+      "autocomplete": "address-level2"
     },
     {
       "name": "province",
-      "label": "Province/State"
+      "label": "Province/State",
+      "autocomplete": "address-level1"
     },
     {
-      "name": "country"
+      "name": "country",
+      "autocomplete": "country-name"
     },
     {
       "name": "pronouns",

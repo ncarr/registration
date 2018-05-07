@@ -1,4 +1,5 @@
 import getAuthenticatedUser from '../util/getAuthenticatedUser'
+import UnauthenticatedError from '../util/UnauthenticatedError'
 
 export default async (req, res, next) => {
   try {
@@ -10,7 +11,7 @@ export default async (req, res, next) => {
       }
       throw new Error('Not an organizer')
     }
-    throw new Error('Please sign in')
+    throw new UnauthenticatedError()
   } catch (e) {
     return next(e)
   }
