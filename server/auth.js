@@ -9,9 +9,12 @@ const router = Router()
 
 router.get('/approve/:token', json(), cookieParser(), async (req, res, next) => {
   try {
-    const { email } = jwt.verify(req.params.token, publicKey, { algorithms: ['ES256'] })
+    const { signIn } = jwt.verify(req.params.token, publicKey, { algorithms: ['ES256'] })
+    if (!signIn) {
+      throw new Error('Invalid token')
+    }
     const token = await genToken()
-    User.updateOne({ email }, { $push: { tokens: token } }).exec()
+    await User.updateOne({ email: signIn }, { $push: { tokens: token } }).exec()
     res.cookie('token', token, { maxAge: 365 * 24 * 60 * 60 * 1000 })
     res.redirect('/dashboard')
   } catch (e) {

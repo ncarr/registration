@@ -82,4 +82,57 @@ router.post('/users/me/application/submit', authenticated, (req, res, next) =>
     .catch(next)
 )
 
+router.delete('/users/me/google', authenticated, async (req, res, next) => {
+  delete req.user.googleID
+  await req.user.save()
+  res.send('OK')
+})
+
+router.put('/users/me/signin/email', authenticated, json(), async (req, res, next) => {
+  try {
+    if (req.body.enabled) {
+      req.user.emailSignInEnabled = true
+    } else {
+      if (!req.user.googleSignInEnabled) {
+        throw new Error('You still need SOME way to sign in!')
+      }
+      req.user.emailSignInEnabled = false
+    }
+    await req.user.save()
+    res.send('OK')
+  } catch (e) {
+    next(e)
+  }
+})
+
+router.put('/users/me/signin/google', authenticated, json(), async (req, res, next) => {
+  try {
+    if (req.body.enabled) {
+      req.user.googleSignInEnabled = true
+    } else {
+      if (!req.user.emailSignInEnabled) {
+        throw new Error('You still need SOME way to sign in!')
+      }
+      req.user.googleSignInEnabled = false
+    }
+    await req.user.save()
+    res.send('OK')
+  } catch (e) {
+    next(e)
+  }
+})
+
+router.get('/users/me/settings', authenticated, (req, res, next) => {
+  const { email, emailVerified, emailSignInEnabled, googleSignInEnabled } = req.user
+  res.send({ email, emailVerified, emailSignInEnabled, googleSignInEnabled })
+})
+
+router.get('/users/me/signedin', async (req, res, next) => {
+  if (await getAuthenticatedUser(req)) {
+    res.send({ signedIn: true })
+  } else {
+    res.send({ signedIn: false })
+  }
+})
+
 export default router

@@ -1,5 +1,10 @@
 <template>
   <v-app>
+    <v-toolbar app fixed flat color="transparent" v-if="signedIn">
+      <v-btn icon nuxt :to="{ name: 'dashboard' }">
+        <v-icon>arrow_back</v-icon>
+      </v-btn>
+    </v-toolbar>
     <v-content>
       <v-container>
         <v-layout>
@@ -26,7 +31,6 @@
 </template>
 
 <script>
-import localforage from 'localforage'
 import Profile from '~/components/Profile'
 import Application from '~/components/Application'
 
@@ -38,8 +42,10 @@ export default {
   async asyncData ({ app }) {
     try {
       const { data } = await app.$axios.get('/users/me')
-      return { application: data }
-    } catch (e) {}
+      return { application: data, signedIn: true }
+    } catch (e) {
+      return { application: {}, signedIn: false }
+    }
   },
   data: () => ({
     application: {},
@@ -77,10 +83,9 @@ export default {
   },
   mounted () {
     window.onSignIn = async googleUser => {
-      if (!await localforage.getItem('google')) {
+      if (!this.application.googleID) {
         this.signin = false
         await this.$axios.post('/signin/google/token', { token: googleUser.getAuthResponse().id_token })
-        await localforage.setItem('google', true)
         // Download application
         const { data } = await this.$axios.get('/users/me')
         this.application = data

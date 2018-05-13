@@ -30,6 +30,12 @@
 
 <script>
 export default {
+  async fetch ({ app, redirect }) {
+    const { data } = await app.$axios.get('/users/me/signedin')
+    if (data.signedIn) {
+      redirect('/dashboard')
+    }
+  },
   data: () => ({
     email: '',
     error: '',
@@ -37,7 +43,7 @@ export default {
   }),
   methods: {
     async signin () {
-      await this.$axios.post('/signin', { email: this.email })
+      await this.$axios.post('/signin/email', { email: this.email })
       this.sent = true
     }
   },

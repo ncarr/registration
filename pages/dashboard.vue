@@ -1,10 +1,16 @@
 <template>
   <v-app>
+    <v-toolbar app fixed>
+      <v-toolbar-title>Dashboard</v-toolbar-title>
+      <v-spacer />
+      <v-btn icon nuxt :to="{ name: 'settings' }">
+        <v-icon>settings</v-icon>
+      </v-btn>
+    </v-toolbar>
     <v-content>
       <v-container>
         <v-layout>
           <v-flex text-xs-center sm6 offset-sm3 xs12>
-            <h1>Dashboard</h1>
             <v-card>
               <v-card-title class="headline">LunarHacks Application</v-card-title>
               <v-card-text v-if="data === 0">In progress</v-card-text>

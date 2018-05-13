@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     async email () {
-      await this.$axios.post('/signin', { email: this.email })
+      await this.$axios.post('/signin/email', { email: this.email })
       this.$emit('signin')
     }
   }

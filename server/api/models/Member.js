@@ -2,9 +2,13 @@ import mongoose from 'mongoose'
 
 const schema = new mongoose.Schema({
   // Metadata
-  email: { type: String, required: true, unique: true },
+  email: String,
   emailVerified: Boolean,
+  previousEmail: String,
+  previousEmailVerified: Boolean,
   googleID: String,
+  emailSignInEnabled: { type: Boolean, default: true },
+  googleSignInEnabled: { type: Boolean, default: true },
   roles: [String],
   tokens: [String],
   // Profile
