@@ -72,11 +72,9 @@ router.patch('/users/me/profile', authenticated, (req, res, next) =>
     .catch(next)
 )
 
-// TODO: email notification
-// TODO: stop people from resubmitting after the application deadline
-router.post('/users/me/application/submit', authenticated, (req, res, next) =>
+router.post('/users/me/application/unsubmit', authenticated, (req, res, next) =>
   Promise.resolve()
-    .then(() => req.user.set({ submitted: Date.now(), status: 1 }))
+    .then(() => req.user.set({ submitted: null, status: 0 }))
     .then(() => req.user.save())
     .then(::res.json)
     .catch(next)

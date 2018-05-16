@@ -9,11 +9,12 @@
         label="Email"
         autocomplete="email"
         :required="true"
+        :disabled="disabled"
         @blur="$emit('emailBlur')"
       />
       <v-btn v-if="signin" @click="email">Email me a sign-in link</v-btn>
       <p v-if="signin">You have already saved a draft of an application with this email. Please sign in to view the saved copy.</p>
-      <FormBuilder v-model="viewer" :fields="fields" :disabled="signin" />
+      <FormBuilder v-model="viewer" :fields="fields" :disabled="signin || disabled" />
     </v-card-text>
   </v-card>
 </template>
@@ -30,6 +31,10 @@ export default {
       default: () => ({})
     },
     signin: {
+      type: Boolean,
+      default: false
+    },
+    disabled: {
       type: Boolean,
       default: false
     }

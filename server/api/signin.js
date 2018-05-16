@@ -222,4 +222,41 @@ router.post('/users/me/resendverification', authenticated, json(), async (req, r
   }
 })
 
+// TODO: stop people from resubmitting after the application deadline
+router.post('/users/me/application/submit', authenticated, async (req, res, next) => {
+  try {
+    if (!req.user.emailVerified) {
+      const token = jwt.sign({ submit: req.user.email }, privateKey, { algorithm: 'ES256' })
+      emailService.send({
+        template: 'submit',
+        message: { to: req.user.email },
+        locals: { token }
+      })
+      res.send('OK')
+    } else {
+      req.user.set({ submitted: Date.now(), status: 1 })
+      await req.user.save()
+      res.sendStatus(201)
+    }
+  } catch (e) {
+    next(e)
+  }
+})
+
+router.post('/submit/:token', async (req, res, next) => {
+  try {
+    const { submit } = jwt.verify(req.params.token, publicKey, { algorithms: ['ES256'] })
+    if (!submit) {
+      throw new Error('Invalid token')
+    }
+    const member = await Member.findOne({ email: submit }).exec()
+    member.status = 1
+    member.emailVerified = true
+    await member.save()
+    res.send('OK')
+  } catch (e) {
+    next(e)
+  }
+})
+
 export default router
