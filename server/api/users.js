@@ -6,7 +6,13 @@ import authenticated from './middleware/authenticated'
 import Member from './models/Member'
 import genToken from './util/genToken'
 import getAuthenticatedUser from './util/getAuthenticatedUser'
-import UnauthenticatedError from './util/UnauthenticatedError';
+import UnauthenticatedError from './util/UnauthenticatedError'
+import middleware from './util/middleware'
+import audit from './middleware/audit'
+import createUser from './functions/createUser'
+import getUser from './functions/getUser'
+import updateUser from './functions/updateUser'
+import deleteUser from './functions/deleteUser'
 
 const router = Router()
 mongoose.connect('mongodb://localhost/registration')
@@ -17,7 +23,7 @@ router.use(cookieParser())
 
 /* GET users listing. */
 // TODO: pagination
-router.get('/users', organizer, (req, res, next) =>
+router.get('/users', organizer, audit(), (req, res, next) =>
   Member.find().exec()
     .then(::res.json)
     .catch(next)
@@ -25,14 +31,14 @@ router.get('/users', organizer, (req, res, next) =>
 
 // TODO: pagination
 // Q: Should we include accepted attendees?
-router.get('/applicants', organizer, (req, res, next) =>
+router.get('/applicants', organizer, audit(), (req, res, next) =>
   Member.find({ status: 1 }).exec()
     .then(::res.json)
     .catch(next)
 )
 
 // TODO: pagination
-router.get('/attendees', organizer, (req, res, next) =>
+router.get('/attendees', organizer, audit(), (req, res, next) =>
   Member.find({ status: 5 }).exec()
     .then(::res.json)
     .catch(next)
@@ -40,7 +46,7 @@ router.get('/attendees', organizer, (req, res, next) =>
 /* GET user by ID. */
 // TODO: Filter to information available to user
 router.get('/users/me', authenticated, (req, res) => res.json(req.user))
-router.get('/users/me/application/status', authenticated, (req, res) => res.send({ data: req.user.status }))
+router.get('/users/me/dashboard', authenticated, (req, res) => res.send({ data: req.user.status, roles: req.user.roles }))
 
 // TODO: Validate profile + application fields (& ensure email exists)
 router.patch('/users/me', async (req, res, next) => {
@@ -54,7 +60,7 @@ router.patch('/users/me', async (req, res, next) => {
       if (await Member.findOne({ email: req.body.email }).exec()) {
         throw new UnauthenticatedError()
       }
-      member = await Member.create({ ...req.body, tokens: [await genToken()] })
+      member = await Member.create({ ...req.body, roles: ['applicant'], tokens: [await genToken()] })
       res.cookie('token', member.tokens[0], { maxAge: 365 * 24 * 60 * 60 * 1000 })
       res.json(member)
     }
@@ -132,5 +138,14 @@ router.get('/users/me/signedin', async (req, res, next) => {
     res.send({ signedIn: false })
   }
 })
+
+router.post('/users', organizer, json(), audit(), middleware(createUser))
+router.get('/users/:id', organizer, audit(), middleware(getUser))
+router.patch('/users/:id', organizer, json(), audit(async req => ({
+  before: await Member.findById(req.params.id).exec()
+})), middleware(updateUser))
+router.delete('/users/:id', organizer, audit(async req => ({
+  before: await Member.findById(req.params.id).exec()
+})), middleware(deleteUser))
 
 export default router

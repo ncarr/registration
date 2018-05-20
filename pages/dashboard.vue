@@ -1,6 +1,8 @@
 <template>
   <v-app>
+    <organizer-drawer v-if="roles.includes('organizer')" v-model="drawer" />
     <v-toolbar app fixed>
+      <v-toolbar-side-icon v-if="roles.includes('organizer')" @click="drawer = !drawer" />
       <v-toolbar-title>Dashboard</v-toolbar-title>
       <v-spacer />
       <v-btn icon nuxt :to="{ name: 'settings' }">
@@ -32,13 +34,17 @@
 </template>
 
 <script>
+import OrganizerDrawer from '~/components/OrganizerDrawer'
 export default {
+  components: {
+    OrganizerDrawer
+  },
   async asyncData ({ app }) {
-    const { data } = await app.$axios.get('/users/me/application/status')
+    const { data } = await app.$axios.get('/users/me/dashboard')
     return data
   },
   data: () => ({
-    data: 0
+    drawer: undefined
   })
 }
 </script>
