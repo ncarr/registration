@@ -37,7 +37,7 @@ import updateUser from './functions/updateUser'
 import deleteUser from './functions/deleteUser'
 
 const router = Router()
-mongoose.connect('mongodb://localhost/registration')
+mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost/registration')
   .catch(() => console.error('Could not initially connect to MongoDB'))
 
 router.use(cookieParser())

@@ -8,31 +8,18 @@ services:
     container_name: lunarhacks
     ports:
      - "80:80"
+     env_file: .env
     environment:
      - NODE_ENV=production
+     - PORT=80
     depends_on:
-     - db
-    volumes_from:
-     - web-data
-  web-data:
-    build:
-     context: .
-     dockerfile: Dockerfile
-    entrypoint: /bin/true
+      db
     volumes:
-     - /opt/lunarhacks
-     - /opt/lunarhacks/node_modules
-     - /opt/lunarhacks/public
-     - /opt/lunarhacks/uploads
+      /data/secrets:./secrets
   db:
     image: mongo:3.6
     restart: always
-    volumes_from:
-      - db-data
-  db-data:
-    image: mongo:3.6
+    expose:
+      - "27017"
     volumes:
-      - /data/db
-      - /var/lib/mongodb
-      - /var/log/mongodb
-    entrypoint: /bin/true
+      - /data/db:/data/db
