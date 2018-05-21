@@ -11,6 +11,7 @@ services:
     env_file: .env
     environment:
      - NODE_ENV=production
+     - HOST=0.0.0.0
      - PORT=80
     depends_on:
      - db
