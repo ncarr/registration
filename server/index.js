@@ -1,3 +1,6 @@
+import fs from 'fs'
+import http from 'http'
+import https from 'https'
 import express from 'express'
 import { Nuxt, Builder } from 'nuxt'
 
@@ -35,5 +38,11 @@ app.use('/signin', auth)
 app.use(nuxt.render)
 
 // Listen the server
-app.listen(port, host)
+http.createServer(app).listen(port, host)
+if (process.env.KEY_FILE && process.env.CERT_FILE) {
+  const key = fs.readFileSync(process.env.KEY_FILE, 'utf8')
+  const cert = fs.readFileSync(process.env.CERT_FILE, 'utf8')
+  https.createServer({ key, cert }, app).listen(443, host)
+}
+
 console.log('Server listening on ' + host + ':' + port) // eslint-disable-line no-console

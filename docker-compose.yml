@@ -8,6 +8,7 @@ services:
     container_name: lunarhacks
     ports:
      - "80:80"
+     - "443:443"
     env_file: .env
     environment:
      - NODE_ENV=production
