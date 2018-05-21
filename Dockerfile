@@ -4,16 +4,7 @@ EXPOSE 80 443
 
 # Install Utilities
 RUN apt-get update -q  \
- && apt-get install -yqq \
- curl \
- git \
- ssh \
- gcc \
- make \
- build-essential \
- libkrb5-dev \
- sudo \
- apt-utils \
+ && apt-get install -yqq curl \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -31,7 +22,7 @@ WORKDIR /opt/lunarhacks
 # when the local package.json file changes.
 # Install npm packages
 COPY package.json /opt/lunarhacks/package.json
-RUN NODE_ENV=development npm install --quiet && npm cache clean
+RUN NODE_ENV=development npm install --quiet
 
 # Build
 RUN npm build
