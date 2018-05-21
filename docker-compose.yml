@@ -13,9 +13,9 @@ services:
      - NODE_ENV=production
      - PORT=80
     depends_on:
-      db
+     - db
     volumes:
-      /data/secrets:./secrets
+     - /data/secrets:./secrets
   db:
     image: mongo:3.6
     restart: always
