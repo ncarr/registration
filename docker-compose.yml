@@ -1,0 +1,38 @@
+version: '2'
+services:
+  web:
+    restart: always
+    build:
+     context: .
+     dockerfile: Dockerfile
+    container_name: lunarhacks
+    ports:
+     - "80:80"
+    environment:
+     - NODE_ENV=production
+    depends_on:
+     - db
+    volumes_from:
+     - web-data
+  web-data:
+    build:
+     context: .
+     dockerfile: Dockerfile
+    entrypoint: /bin/true
+    volumes:
+     - /opt/lunarhacks
+     - /opt/lunarhacks/node_modules
+     - /opt/lunarhacks/public
+     - /opt/lunarhacks/uploads
+  db:
+    image: mongo:3.6
+    restart: always
+    volumes_from:
+      - db-data
+  db-data:
+    image: mongo:3.6
+    volumes:
+      - /data/db
+      - /var/lib/mongodb
+      - /var/log/mongodb
+    entrypoint: /bin/true
