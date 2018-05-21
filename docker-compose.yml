@@ -15,7 +15,7 @@ services:
     depends_on:
      - db
     volumes:
-     - /data/secrets:./secrets
+     - /data/secrets:/opt/lunarhacks/secrets
   db:
     image: mongo:3.6
     restart: always
