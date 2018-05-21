@@ -1,3 +1,3 @@
 import Member from '../models/Member'
 
-export default (body, me, params) => Member.deleteOne({ _id: params.id }).exec()
+export default ({ params: { id } }) => Member.deleteOne({ _id: id }).exec()

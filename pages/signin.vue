@@ -56,14 +56,6 @@ export default {
         this.error = 'The Google account email is not verified. Please sign in first with your email and then connect your Google account in settings.'
       }
     }
-  },
-  head: {
-    script: [
-      { src: 'https://apis.google.com/js/platform.js' }
-    ],
-    meta: [
-      { name: 'google-signin-client_id', content: process.env.GOOGLE_CLIENT_ID }
-    ]
   }
 }
 </script>

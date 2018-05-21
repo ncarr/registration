@@ -1,3 +1,3 @@
 import Member from '../models/Member'
 
-export default (user, me, params) => Member.findByIdAndUpdate(params.id, { $set: user }).exec()
+export default ({ body, params: { id } }) => Member.findByIdAndUpdate(id, { $set: body }).exec()

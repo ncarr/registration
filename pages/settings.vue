@@ -45,7 +45,7 @@
 <script>
 export default {
   async asyncData ({ app }) {
-    const { data } = await app.$axios.get('/users/me/settings')
+    const { data } = await app.$axios.get('/users/me?fields=settings')
     return { me: data }
   },
   data: () => ({
@@ -105,14 +105,6 @@ export default {
       })
       this.google = this.auth2.isSignedIn.get() && this.auth2.currentUser.get().getBasicProfile().getEmail()
     })
-  },
-  head: {
-    script: [
-      { src: 'https://apis.google.com/js/platform.js' }
-    ],
-    meta: [
-      { name: 'google-signin-client_id', content: process.env.GOOGLE_CLIENT_ID }
-    ]
   }
 }
 </script>

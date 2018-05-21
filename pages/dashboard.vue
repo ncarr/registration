@@ -15,14 +15,14 @@
           <v-flex text-xs-center sm6 offset-sm3 xs12>
             <v-card>
               <v-card-title class="headline">LunarHacks Application</v-card-title>
-              <v-card-text v-if="data === 0">In progress</v-card-text>
-              <v-card-text v-else-if="data === 1">Under review</v-card-text>
-              <v-card-text v-else-if="data === 2">Rejected</v-card-text>
-              <v-card-text v-else-if="data === 3">Accepted</v-card-text>
-              <v-card-text v-else-if="data === 4">Can't come</v-card-text>
-              <v-card-text v-else-if="data === 5">Going</v-card-text>
+              <v-card-text v-if="status === 0">In progress</v-card-text>
+              <v-card-text v-else-if="status === 1">Under review</v-card-text>
+              <v-card-text v-else-if="status === 2">Rejected</v-card-text>
+              <v-card-text v-else-if="status === 3">Accepted</v-card-text>
+              <v-card-text v-else-if="status === 4">Can't come</v-card-text>
+              <v-card-text v-else-if="status === 5">Going</v-card-text>
               <v-card-actions>
-                <v-btn v-if="data === 0" nuxt :to="{ name: 'apply' }">Finish your application</v-btn>
+                <v-btn v-if="status === 0" nuxt :to="{ name: 'apply' }">Finish your application</v-btn>
                 <v-btn v-else nuxt :to="{ name: 'apply' }">View your application</v-btn>
               </v-card-actions>
             </v-card>
@@ -40,7 +40,7 @@ export default {
     OrganizerDrawer
   },
   async asyncData ({ app }) {
-    const { data } = await app.$axios.get('/users/me/dashboard')
+    const { data } = await app.$axios.get('/users/me?fields=dashboard')
     return data
   },
   data: () => ({

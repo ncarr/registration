@@ -1,4 +1,12 @@
 module.exports = {
+  head: {
+    script: [
+      { src: 'https://apis.google.com/js/platform.js' }
+    ],
+    meta: [
+      { name: 'google-signin-client_id', content: process.env.GOOGLE_CLIENT_ID }
+    ]
+  },
   modules: ['@nuxtjs/vuetify', '@nuxtjs/meta'],
   /*
   ** Add axios globally
