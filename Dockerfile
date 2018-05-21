@@ -15,6 +15,8 @@ RUN npm install --quiet
 COPY . .
 
 # Build
+ARG GOOGLE_CLIENT_ID
+ENV GOOGLE_CLIENT_ID $GOOGLE_CLIENT_ID
 RUN npm run build
 
 # Run MEAN.JS server

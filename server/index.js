@@ -11,10 +11,13 @@ const port = process.env.PORT || 3000
 app.set('port', port)
 
 // Import and Set Nuxt.js options
+let dotenv
+if (process.env.NODE_ENV !== 'production') {
+  dotenv = require('dotenv').config()
+}
 let config = require('../nuxt.config.js')
 config.dev = !(process.env.NODE_ENV === 'production')
 if (config.dev) {
-  const dotenv = require('dotenv').config()
   config.env = { GOOGLE_CLIENT_ID: dotenv.parsed.GOOGLE_CLIENT_ID }
 }
 

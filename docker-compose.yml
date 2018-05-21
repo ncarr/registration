@@ -4,6 +4,8 @@ services:
     restart: always
     build:
      context: .
+     args:
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
      dockerfile: Dockerfile
     container_name: lunarhacks
     ports:
