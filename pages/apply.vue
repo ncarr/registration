@@ -9,6 +9,13 @@
       <v-container>
         <v-layout>
           <v-flex text-xs-center sm6 offset-sm3 xs12 v-if="!submitted && !sent">
+            <v-card class="mb-3">
+              <v-card-title class="headline">Connect with Google</v-card-title>
+              <v-card-text>Connecting with Google allows you to skip email verification and checking your email every time you sign in.</v-card-text>
+              <v-card-actions>
+                <div class="g-signin2 mb-2" data-onsuccess="onSignIn"></div>
+              </v-card-actions>
+            </v-card>
             <Profile v-model="application" @emailBlur="checkEmail" @signin="sent = true" :signin="signin" :disabled="application.status > 0" />
             <Application v-model="application" :disabled="signin || application.status > 0" />
             <v-btn v-if="saving" flat color="secondary">Saving...</v-btn>

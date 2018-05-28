@@ -2,7 +2,6 @@
   <v-card class="mb-3">
     <v-card-title primary-title class="headline">Profile</v-card-title>
     <v-card-text>
-      <div class="g-signin2" data-onsuccess="onSignIn"></div>
       <v-text-field
         v-model="viewer.email"
         type="email"

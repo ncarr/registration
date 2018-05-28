@@ -35,6 +35,8 @@ import createUser from './functions/createUser'
 import getUser from './functions/getUser'
 import updateUser from './functions/updateUser'
 import deleteUser from './functions/deleteUser'
+import getLog from './functions/getLog';
+import getLogAction from './functions/getLogAction'
 
 const router = Router()
 mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost/registration')
@@ -73,6 +75,8 @@ router.patch('/users/:id', organizer, json(), audit(async req => ({
 router.delete('/users/:id', organizer, audit(async req => ({
   before: await Member.findById(req.params.id).exec()
 })), middleware(deleteUser))
+router.get('/log', organizer, middleware(getLog))
+router.get('/log/:id', organizer, middleware(getLogAction))
 
 router.use((err, req, res, next) => res.status(err.status || 500).json({ error: { message: err.message, name: err.name, stack: err.stack } }))
 
