@@ -29,13 +29,14 @@ import deleteGoogle from './functions/deleteGoogle'
 import emailSignIn from './functions/emailSignIn'
 import googleSignin from './functions/googleSignIn'
 import signedIn from './functions/signedIn'
+import rsvp from './functions/rsvp'
 
 import listUsers from './functions/listUsers'
 import createUser from './functions/createUser'
 import getUser from './functions/getUser'
 import updateUser from './functions/updateUser'
 import deleteUser from './functions/deleteUser'
-import getLog from './functions/getLog';
+import getLog from './functions/getLog'
 import getLogAction from './functions/getLogAction'
 
 const router = Router()
@@ -65,6 +66,7 @@ router.delete('/users/me/google', authenticated, middleware(deleteGoogle))
 router.put('/users/me/signin/email', authenticated, json(), middleware(emailSignIn))
 router.put('/users/me/signin/google', authenticated, json(), middleware(googleSignin))
 router.get('/users/me/signedin', middleware(signedIn))
+router.post('/users/me/rsvp', authenticated, json(), middleware(rsvp))
 
 router.get('/users', organizer, audit(), middleware(listUsers))
 router.post('/users', organizer, json(), audit(), middleware(createUser))

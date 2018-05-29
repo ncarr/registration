@@ -19,8 +19,19 @@
               <v-card-text v-else-if="status === 1">Under review</v-card-text>
               <v-card-text v-else-if="status === 2">Rejected</v-card-text>
               <v-card-text v-else-if="status === 3">Accepted</v-card-text>
-              <v-card-text v-else-if="status === 4">Can't come</v-card-text>
-              <v-card-text v-else-if="status === 5">Going</v-card-text>
+              <v-card-text v-else-if="status === 4">
+                Can't come 
+                <v-btn flat @click="rsvpOpen = true">Change</v-btn>
+              </v-card-text>
+              <v-card-text v-else-if="status === 5">
+                Going
+                <v-btn flat @click="rsvpOpen = true">Change</v-btn>
+              </v-card-text>
+                <v-card-text v-if="status === 3 || rsvpOpen">
+                  <h3 class="headline">RSVP</h3>
+                  <v-btn @click="rsvp(true)">Going</v-btn>
+                  <v-btn @click="rsvp(false)">Can't come</v-btn>
+                </v-card-text>
               <v-card-actions>
                 <v-btn v-if="status === 0" nuxt :to="{ name: 'apply' }">Finish your application</v-btn>
                 <v-btn v-else nuxt :to="{ name: 'apply' }">View your application</v-btn>
@@ -44,7 +55,15 @@ export default {
     return data
   },
   data: () => ({
-    drawer: undefined
-  })
+    drawer: undefined,
+    rsvpOpen: false
+  }),
+  methods: {
+    async rsvp (going) {
+      this.rsvpOpen = false
+      await this.$axios.post('/users/me/rsvp', { going })
+      this.status = 4 + going
+    }
+  }
 }
 </script>
