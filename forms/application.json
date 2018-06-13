@@ -1,9 +1,6 @@
 {
   "fields": [
     {
-      "name": "shirtSize"
-    },
-    {
       "name": "achievement",
       "label": "What was your best achievement? It doesn't have to be computer-related. (1500 chars max)",
       "multiLine": true

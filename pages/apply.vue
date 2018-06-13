@@ -8,37 +8,25 @@
     <v-content>
       <v-container>
         <v-layout>
-          <v-flex text-xs-center sm6 offset-sm3 xs12 v-if="!submitted && !sent">
-            <v-card class="mb-3">
-              <v-card-title class="headline">Connect with Google</v-card-title>
-              <v-card-text>Connecting with Google allows you to skip email verification and checking your email every time you sign in.</v-card-text>
-              <v-card-actions>
-                <div class="g-signin2 mb-2" data-onsuccess="onSignIn"></div>
-              </v-card-actions>
-            </v-card>
-            <Profile v-model="application" @emailBlur="checkEmail" @signin="sent = true" :signin="signin" :disabled="application.status > 0" />
-            <Application v-model="application" :disabled="signin || application.status > 0" />
-            <v-btn v-if="saving" flat color="secondary">Saving...</v-btn>
-            <v-btn v-else-if="saved" flat color="secondary" :disabled="application.status > 0">Saved</v-btn>
-            <v-btn v-else-if="application.status === 0" flat color="secondary" @click="save" :disabled="signin">Save</v-btn>
-            <v-btn v-if="application.status === 0" color="primary" @click="submit" :disabled="signin">Submit</v-btn>
-            <template v-else>
+          <v-flex text-xs-center sm6 offset-sm3 xs12 v-if="!submitted">
+            <SignIn v-model="application" @input="signedIn = true" />
+            <FormBuilder title="Profile" v-model="application" :fields="profileFields" :disabled="!signedIn" @update="sendUpdate" />
+            <FormBuilder title="Application" v-model="application" :fields="applicationFields" :disabled="!signedIn || application.status > 0" @update="sendUpdate" />
+            <p v-if="signedIn">All changes are saved in the cloud</p>
+            <v-btn v-if="application.status === 0" color="primary" @click="submit" :disabled="!signedIn">Submit</v-btn>
+            <template v-else-if="signedIn">
               <v-btn @click="unsubmit">Unsubmit</v-btn>
               <p>Note: you will lose your spot in the queue if you unsubmit</p>
             </template>
           </v-flex>
-          <v-flex text-xs-center sm6 offset-sm3 xs12 v-else-if="!sent && application.emailVerified">
+          <v-flex text-xs-center sm6 offset-sm3 xs12 v-else-if="application.emailVerified">
             <h1 class="headline">Submitted!</h1>
             <v-btn nuxt :to="{ name: 'dashboard' }">Go to dashboard</v-btn>
           </v-flex>
-          <v-flex text-xs-center sm6 offset-sm3 xs12 v-else-if="!sent">
+          <v-flex text-xs-center sm6 offset-sm3 xs12 v-else>
             <h1 class="headline">One last step!</h1>
             <p>Check your email for a confirmation link, then your application will be submitted.</p>
             <v-btn nuxt :to="{ name: 'dashboard' }">Go to dashboard</v-btn>
-          </v-flex>
-          <v-flex text-xs-center sm6 offset-sm3 xs12 v-else>
-            <h1 class="headline">Sign-in link sent</h1>
-            <p>Click the link in your email within the next 15 minutes to sign in to LunarHacks and edit your saved application.</p>
           </v-flex>
         </v-layout>
       </v-container>
@@ -47,38 +35,36 @@
 </template>
 
 <script>
-import Profile from '~/components/Profile'
-import Application from '~/components/Application'
+import Delta from 'quill-delta'
+import SignIn from '~/components/SignIn'
+import FormBuilder from '~/components/FormBuilder'
+import profile from '~/forms/profile'
+import application from '~/forms/application'
 
 export default {
   components: {
-    Profile,
-    Application
+    SignIn,
+    FormBuilder
   },
   async asyncData ({ app }) {
     try {
       const { data } = await app.$axios.get('/users/me')
-      return { application: data, signedIn: true }
+      // Please change this ugly hack back to { application: data } when Vue 2.5.17 is released
+      return { application: { ...[...profile.fields, ...application.fields].reduce((o, field) => ({ ...o, [field.name]: '' }), {}), ...data }, signedIn: true }
     } catch (e) {
-      return { application: { status: 0 }, signedIn: false }
+      // Change this back to null too
+      return { application: [...profile.fields, ...application.fields].reduce((o, field) => ({ ...o, [field.name]: '' }), {}), signedIn: false }
     }
   },
   data: () => ({
-    saving: false,
-    saved: true,
-    sent: false,
-    signin: false,
-    submitted: false
+    socket: null,
+    submitted: false,
+    profileFields: profile.fields,
+    applicationFields: application.fields
   }),
   methods: {
-    async save () {
-      this.saving = true
-      await this.$axios.patch('/users/me', this.application)
-      this.saving = false
-      this.saved = true
-    },
     async submit () {
-      await this.save()
+      // await this.save()
       await this.$axios.post('/users/me/application/submit')
       this.submitted = true
     },
@@ -86,30 +72,20 @@ export default {
       await this.$axios.post('/users/me/application/unsubmit')
       this.application.status = 0
     },
-    async checkEmail () {
-      try {
-        await this.$axios.post('/signin/checkemail')
-        this.signin = false
-      } catch (e) {
-        this.signin = true
-      }
-    }
-  },
-  watch: {
-    application () {
-      this.saved = false
+    sendUpdate (update) {
+      this.socket.emit('update', update)
     }
   },
   mounted () {
-    window.onSignIn = async googleUser => {
-      if (!this.application.googleID) {
-        this.signin = false
-        await this.$axios.post('/signin/google/token', { token: googleUser.getAuthResponse().id_token })
-        // Download application
-        const { data } = await this.$axios.get('/users/me')
-        this.application = data
+    const io = require('socket.io-client')
+    this.socket = io('/application')
+    this.socket.on('update', ({ field, delta, value }) => {
+      if (delta) {
+        this.application[field] = new Delta().insert(this.application[field] || '').compose(delta).reduce((text, { insert }) => text + insert, '')
+      } else {
+        this.application[field] = value
       }
-    }
+    })
   }
 }
 </script>

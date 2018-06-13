@@ -15,6 +15,7 @@
     "@nuxtjs/meta": "^2.2.1",
     "@nuxtjs/vuetify": "^0.4.2",
     "axios": "^0.18.0",
+    "cookie": "^0.3.1",
     "cookie-parser": "^1.4.3",
     "cross-env": "^5.1.5",
     "email-templates": "^3.6.0",
@@ -28,6 +29,8 @@
     "mongoose": "^5.1.0",
     "nodemailer-mailgun-transport": "^1.4.0",
     "nuxt": "^1.4.0",
+    "quill-delta": "^3.6.2",
+    "socket.io": "^2.1.1",
     "source-map-support": "^0.5.5"
   },
   "devDependencies": {

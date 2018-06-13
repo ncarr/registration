@@ -100,14 +100,14 @@
                     label="Pronouns"
                     v-model="member.pronouns"
                   />
-                </section>
-                <section v-if="member.roles && member.roles.includes('applicant')">
-                  <v-subheader>Application</v-subheader>
                   <v-select
                     :items="shirtSizes"
                     label="Shirt Size"
                     v-model="member.shirtSize"
                   />
+                </section>
+                <section v-if="member.roles && member.roles.includes('applicant')">
+                  <v-subheader>Application</v-subheader>
                   <v-text-field
                     multi-line
                     label="What was your best acheivement? It doesn't have to be computer-related. (1500 chars max)"

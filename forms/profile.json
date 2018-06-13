@@ -37,7 +37,14 @@
     },
     {
       "name": "pronouns",
-      "optional": true
+      "optional": true,
+      "type": "select",
+      "combobox": true,
+      "items": [
+        "He/Him/His",
+        "She/Her/Hers",
+        "They/Them/Their"
+      ]
     },
     {
       "name": "dietaryRestrictions",
@@ -48,6 +55,17 @@
       "name": "specialNeeds",
       "optional": true,
       "multiLine": true
+    },
+    {
+      "name": "shirtSize",
+      "type": "select",
+      "items": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
     }
   ]
 }

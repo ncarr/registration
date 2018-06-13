@@ -3,6 +3,7 @@ import http from 'http'
 import https from 'https'
 import express from 'express'
 import { Nuxt, Builder } from 'nuxt'
+import io from './socket'
 
 const app = express()
 const host = process.env.HOST || '127.0.0.1'
@@ -41,11 +42,15 @@ app.use('/signin', auth)
 app.use(nuxt.render)
 
 // Listen the server
-http.createServer(app).listen(port, host)
+const httpServer = http.createServer(app)
+io.listen(httpServer)
+httpServer.listen(port, host)
 if (process.env.KEY_FILE && process.env.CERT_FILE) {
   const key = fs.readFileSync(process.env.KEY_FILE, 'utf8')
   const cert = fs.readFileSync(process.env.CERT_FILE, 'utf8')
-  https.createServer({ key, cert }, app).listen(443, host)
+  const httpsServer = https.createServer({ key, cert }, app)
+  io.attach(httpsServer)
+  httpsServer.listen(443, host)
 }
 
 console.log('Server listening on ' + host + ':' + port) // eslint-disable-line no-console
